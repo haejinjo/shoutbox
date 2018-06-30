@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Shoutbox</title>
+
+    <script type="text/javascript">
+
+        function buttonPressed() {
+            let words = document.getElementById('input').value; // save whats been typed into input bar
+            if (words.length) {
+                document.getElementById('box').innerHTML += "<br>" + words; // have words show up on box
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <header>
+            <a href="/ghanoush">Ethnic</a>
+            <a href="/blacksheep">Childish</a>
+        </header>
+
+        <div id="box-container">
+            <div id="box">
+            </div>
+            <form method="post">
+                <input type="text" id="input" name="hobo">
+                <button onclick="buttonPressed()"> Submit </button>
+            </form>
+        </div>
+
+        <footer></footer>
+    </div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+<style>
+    #container {
+        display: flex;
+        justify-content: center;
+    }
+
+    #box-container {
+        display: grid;
+        grid-template-rows: 300px 50px;
+        grid-template-columns: 100px 100px 100px;
+        grid-gap: 5px;
+    }
+
+    #box {
+        border: 5px dotted pink;
+        overflow: scroll;
+        grid-column: 1/4;
+        grid-row: 1;
+        padding: 10px;
+        font-family: "Helvetica";
+    }
+
+    h4 {
+        color: darkgray;
+        position: fixed;
+    }
+
+    input {
+        grid-column: 1/2;
+        grid-row: 2;
+    }
+
+    button {
+        grid-column: 2/3;
+        grid-row: 2;
+    }
+</style>
