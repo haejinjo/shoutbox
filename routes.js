@@ -35,7 +35,7 @@ router.get("/", function(req, res) {
             http.send(params);
             document.getElementById(\'input\').value = '';
             if (words.length) { 
-              document.getElementById(\'box\').innerHTML +=  words; 
+              document.getElementById(\'box\').innerHTML +=  \'<br>\' + words; 
             } 
           } 
         </script> 
@@ -43,8 +43,8 @@ router.get("/", function(req, res) {
           <body onload=\'injectDBTxt()\'> 
             <div id=\'container\'> 
               <header> 
-                <a href=\'/ghanoush\'>Ethnic</a> 
-                <a href=\'/blacksheep\'>Childish</a> 
+                <a href=\'/ghanoush\'>Baba1</a> 
+                <a href=\'/blacksheep\'>Baba2</a> 
               </header> 
               <div id=\'box-container\'> 
                 <div id=\'box\'> </div> 
@@ -99,7 +99,7 @@ router.post("/", function(req, res) {
   // read what has been posted
   // write it to db.txt
   if (req.body.hobo !== "") {
-    fs.appendFile("db.txt", req.body.hobo + "<br>", function(err) {
+    fs.appendFile("db.txt", "<br>" + req.body.hobo, function(err) {
       if (err) throw err;
       else console.log("Wrote to db.txt");
     });
