@@ -2,29 +2,39 @@
 var express = require("express");
 var router = express.Router();
 let fs = require("fs");
-let dbContents = '';
+let dbContents = "";
 
 router.get("/", function(req, res) {
-  // res.sendFile(__dirname + "/views/index.html");
-  fs.readFile("./db.txt", "utf8",
-    (e, data) => {
-
-      if (e) throw e;
-      dbContents = data;
-      // dbContents = dbContents.replace("'", "\'");
-      console.log("dbContents: " + dbContents + "typeof that shit: " + typeof(dbContents));
-      dbContents = dbContents.replace(/'/g, "\\'");
-      res.status(200).send(
-        `
+  fs.readFile("./db.txt", "utf8", (e, data) => {
+    if (e) throw e;
+    dbContents = data;
+    dbContents = dbContents.replace(/'/g, "\\'");
+    res.status(200).send(
+      `
       <!DOCTYPE HTML> 
       <html> 
         <head> 
         <title>Shoutbox</title> 
         <script>
         function injectDBTxt() { 
-          document.getElementById(\'box\').innerHTML = \'` + dbContents + `\' } 
+          document.getElementById(\'box\').innerHTML = \'` +
+        dbContents +
+        `\' } 
           function buttonPressed() { 
             let words = document.getElementById(\'input\').value; 
+            let http = new XMLHttpRequest();
+            let url = \'/\';
+            let params = \'hobo=\' + words;
+            http.open(\'POST\', url, true);
+            http.setRequestHeader(\'Content-type\', \'application/x-www-form-urlencoded\');
+            http.onreadystatechange = function() {
+              if(http.readyState === 4 && http.status === 200) {
+                console.log('Got successful response');
+                
+              }
+            }
+            http.send(params);
+
             if (words.length) { 
               document.getElementById(\'box\').innerHTML += \'<br>\' + words; 
             } 
@@ -39,10 +49,8 @@ router.get("/", function(req, res) {
               </header> 
               <div id=\'box-container\'> 
                 <div id=\'box\'> </div> 
-                <form method=\'post\'> 
                 <input type=\'text\' id=\'input\' name=\'hobo\'> 
                 <button onclick=\'buttonPressed()\'> Submit </button> 
-                </form> 
               </div> 
               <footer></footer> 
             </div> 
@@ -84,21 +92,20 @@ router.get("/", function(req, res) {
               } 
             </style>
             `
-      );
- 
-    });
+    );
+  });
 });
 
 router.post("/", function(req, res) {
   // read what has been posted
   // write it to db.txt
-  if(req.body.hobo !== '') {
+  if (req.body.hobo !== "") {
     fs.appendFile("db.txt", req.body.hobo + "<br>", function(err) {
       if (err) throw err;
       else console.log("Wrote to db.txt");
     });
   }
-  res.redirect('back');
+  res.redirect("back");
 });
 
 router.get("/ghanoush", function(req, res) {
