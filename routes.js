@@ -30,13 +30,12 @@ router.get("/", function(req, res) {
             http.onreadystatechange = function() {
               if(http.readyState === 4 && http.status === 200) {
                 console.log('Got successful response');
-                
               }
             }
             http.send(params);
-
+            document.getElementById(\'input\').value = '';
             if (words.length) { 
-              document.getElementById(\'box\').innerHTML += \'<br>\' + words; 
+              document.getElementById(\'box\').innerHTML +=  words; 
             } 
           } 
         </script> 
