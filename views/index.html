@@ -4,79 +4,101 @@
 <head>
     <title>Shoutbox</title>
 
-    <script type="text/javascript">
+    <script>
+        function injectDBTxt() {
+            let dbContents = '';
+            let http = new XMLHttpRequest();
+            http.open('GET', '/blacksheep');
+            http.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    console.log('successful');
+                    box.innerHTML = this.responseText;
+                } else {
+                    console.log('failed with ' + this.readyState);
+                }
+            }
+
+            http.send();
+            // document.getElementById('box').innerHTML = dbContents
+        }
 
         function buttonPressed() {
-            let words = document.getElementById('input').value; // save whats been typed into input bar
+            let words = document.getElementById('hobo').value ? document.getElementById('hobo').value : '';
             if (words.length) {
-                document.getElementById('box').innerHTML += "<br>" + words; // have words show up on box
+                document.getElementById('box').innerHTML += words;
             }
+
+            let http = new XMLHttpRequest();
+            let params = "hobo=" + words;
+
+            http.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById('hobo').value = '';
+                }
+            }
+
+            http.open('POST', '/');
+            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            http.send(params);
         }
     </script>
+
+    <style>
+        #container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #box-container {
+            display: grid;
+            grid-template-rows: 300px 50px;
+            grid-template-columns: 100px 100px 100px;
+            grid-gap: 5px;
+        }
+
+        #box {
+            border: 5px dotted pink;
+            overflow: scroll;
+            grid-column: 1/4;
+            grid-row: 1;
+            padding: 10px;
+            font-family: "Helvetica";
+        }
+
+        h4 {
+            color: darkgray;
+            position: fixed;
+        }
+
+        input {
+            grid-column: 1/2;
+            grid-row: 2;
+        }
+
+        button {
+            grid-column: 2/3;
+            grid-row: 2;
+        }
+    </style>
 </head>
 
-<body>
+<body onload='injectDBTxt()'>
     <div id="container">
         <header>
-            <a href="/ghanoush">Ethnic</a>
-            <a href="/blacksheep">Childish</a>
+            <a href="/ghanoush">Baba</a>
+            <a href="/blacksheep">Baba2</a>
         </header>
+
 
         <div id="box-container">
             <div id="box">
             </div>
-            <input type="text" id="input" name="hobo">
+            <input type="text" id="hobo" name="hobo">
             <button onclick="buttonPressed()"> Submit </button>
         </div>
 
         <footer></footer>
     </div>
-
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-<style>
-    #container {
-        display: flex;
-        justify-content: center;
-    }
-
-    #box-container {
-        display: grid;
-        grid-template-rows: 300px 50px;
-        grid-template-columns: 100px 100px 100px;
-        grid-gap: 5px;
-    }
-
-    #box {
-        border: 5px dotted pink;
-        overflow: scroll;
-        grid-column: 1/4;
-        grid-row: 1;
-        padding: 10px;
-        font-family: "Helvetica";
-    }
-
-    h4 {
-        color: darkgray;
-        position: fixed;
-    }
-
-    input {
-        grid-column: 1/2;
-        grid-row: 2;
-    }
-
-    button {
-        grid-column: 2/3;
-        grid-row: 2;
-    }
-</style>
